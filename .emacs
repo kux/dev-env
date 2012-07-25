@@ -107,3 +107,12 @@
 (global-set-key (kbd "C-c b") 'bf-pretty-print-xml-region)
 
 (server-start)
+
+
+
+;; autocompletion, take 3: (app-emacs/pymacs, ropemacs)
+
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
+(global-set-key (kbd "C-/") 'rope-code-assist)
+(global-set-key (kbd "C-c g") 'rope-goto-definition)
