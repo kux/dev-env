@@ -5,7 +5,7 @@
 (ido-mode 1)
 
 ;; (set-default-font "-adobe-courier-medium-r-normal--14-100-100-100-m-90-iso10646-1")
-(set-face-attribute 'default nil :height 95)
+;; (set-face-attribute 'default nil :height 95)
 
 ;; scrolling, parens, cursor, menu, and such:
 (scroll-bar-mode nil)
@@ -86,7 +86,8 @@
 ;; (global-set-key (kbd "C-c q") 'ecb-deactivate)
 
 (load "~/.emacs.d/light-symbol.el")
-(set-face-background  'hi-blue "Grey60")
+(set-face-background  'hi-blue "Grey90")
+(set-face-foreground  'hi-blue "Grey01")
 
 (autoload #'espresso-mode "~/.emacs.d/espresso.el" "Start espresso-mode" t)
 (add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
@@ -115,7 +116,7 @@
 (require 'pymacs)
 (pymacs-load "ropemacs" "rope-")
 (global-set-key (kbd "C-c g") 'rope-goto-definition)
-(global-set-key (kbd "C-/") 'dabbrev-expand)
+(global-set-key (kbd "M-,") 'dabbrev-expand)
 
 
 
@@ -134,3 +135,7 @@
   (eval-after-load "tramp-compat"
     '(add-to-list 'byte-compile-not-obsolete-vars
                   'font-lock-beginning-of-syntax-function)))
+
+(require 'color-theme)
+(color-theme-initialize)
+;; (color-theme-ld-dark)

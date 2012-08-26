@@ -126,6 +126,7 @@ class PylintRunner(LintRunner):
         "R0903",  # Too few public methods
         "R0201",  # Method could be a function
         "W0141",  # Used built in function map
+        "C0301",  # Line to long
         ])
 
     @staticmethod
@@ -176,9 +177,10 @@ class Pep8Runner(LintRunner):
       spiders/structs.py:25:33: W602 deprecated form of raising exception
       spiders/structs.py:51:9: E301 expected 1 blank line, found 0 """
     command = PEP8_COMMAND
-    # sane_default_ignore_codes = set([
-    #     'RW29', 'W391',
-    #     'W291', 'WO232'])
+    sane_default_ignore_codes = set([
+        # 'RW29', 'W391',
+        # 'W291', 'WO232',
+        'E501'])
     output_matcher = re.compile(
         r'(?P<filename>[^:]+):'
         r'(?P<line_number>[^:]+):'
