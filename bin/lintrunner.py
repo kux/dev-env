@@ -23,6 +23,7 @@ class LintRunner(object):
     #or in non-retardate: r'(.*) at ([^ \n]) line ([0-9])[,.\n]'
     output_format = "%(level)s %(error_type)s%(error_number)s:" \
                     "%(description)s at %(filename)s line %(line_number)s."
+    ignore_regexes = []
 
     def __init__(self, virtualenv=None, ignore_codes=(),
                  use_sane_defaults=True):
@@ -53,6 +54,10 @@ class LintRunner(object):
 
     @classmethod
     def process_output(cls, line):
+        for regex in cls.ignore_regexes:
+            if regex.search(line):
+                return
+
         m = cls.output_matcher.match(line)
         if m:
             fixed_data = dict.fromkeys(('level', 'error_type',
@@ -128,6 +133,9 @@ class PylintRunner(LintRunner):
         "W0141",  # Used built in function map
         "C0301",  # Line to long
         ])
+    ignore_regexes = [
+        re.compile(r"has no 'objects' member"),
+        re.compile(r"has no 'DoesNotExist' member")]
 
     @staticmethod
     def fixup_data(_line, data):

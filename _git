@@ -1,0 +1,9 @@
+root_dir=$PWD 
+for wk in `find -name '.git' -type d`
+do
+    wk=${wk%.git}
+    cd $wk
+    echo $wk >&2
+    git $@
+    cd $root_dir
+done
