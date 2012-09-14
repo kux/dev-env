@@ -135,7 +135,8 @@ class PylintRunner(LintRunner):
         ])
     ignore_regexes = [
         re.compile(r"has no 'objects' member"),
-        re.compile(r"has no 'DoesNotExist' member")]
+        re.compile(r"has no 'DoesNotExist' member"),
+        re.compile(r"_ is not callable")]
 
     @staticmethod
     def fixup_data(_line, data):
