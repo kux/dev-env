@@ -1,0 +1,10 @@
+virt_env=$1
+for item in `ls -l src | grep ^d | cut -c40-`
+do
+    export PYTHONPATH=$PYTHONPATH:$PWD/src/$item
+done
+
+export PYTHONPATH=$PYTHONPATH:$PWD/$virt_env/lib/python2.7/site-packages
+
+emacs &
+
