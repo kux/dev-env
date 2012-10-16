@@ -249,12 +249,13 @@ def main():
                       help="error codes to ignore")
     options, args = parser.parse_args()
 
-    for runnerclass in (PylintRunner,
-                        # PycheckerRunner,
-                        Pep8Runner,
-                        # PyflakesRunner,
-                        # CompilerRunner
-                        ):
+    for runnerclass in (
+        PylintRunner,
+        # PycheckerRunner,
+        # Pep8Runner,
+        # PyflakesRunner,
+        # CompilerRunner
+        ):
 
         runner = runnerclass(virtualenv=options.virtualenv,
                              ignore_codes=options.ignore_codes)
