@@ -1,9 +1,38 @@
+repos=""
+command=""
+append_to_repos=""
+
+for var in "$@"; do
+    if [ "$var" == "--repos" ]; then
+        append_to_repos="yes"
+        continue
+    fi
+    if [ -z "$append_to_repos" ]; then
+        command="$command $var"
+    else
+        repos="$repos $var"
+    fi
+done
+
 root_dir=$PWD 
-for wk in `find -name '.git' -type d`
-do
+for wk in `find -name '.git' -type d`; do
     wk=${wk%.git}
-    cd $wk
-    echo $wk >&2
-    git $@
-    cd $root_dir
+    repo_name=${wk%/}
+    repo_name="${repo_name##*/}"
+
+    show_for_repo=""
+    for repo in $repos; do
+        if [[ "$repo_name" == "$repo" ]]; then
+            show_for_repo="yes"
+            break
+        fi
+    done
+    if [[ -n "$show_for_repo" || -z "$append_to_repos" ]]; then
+        cd $wk
+        tput setaf 1
+        echo $wk >&2
+        tput setaf 7
+        git $command
+        cd $root_dir
+    fi
 done

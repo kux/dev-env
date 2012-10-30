@@ -1,11 +1,8 @@
-virt_env=$1
-for proj in $(find src -name '.git')
+for proj in $(find . -name '.git')
 do
     proj=${proj%.git}
     export PYTHONPATH=$PYTHONPATH:$PWD/$proj
 done
-
-export PYTHONPATH=$PYTHONPATH:$PWD/$virt_env/lib/python2.7/site-packages
 
 emacs &
 
