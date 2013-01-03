@@ -135,6 +135,7 @@ class PylintRunner(LintRunner):
         ])
     ignore_regexes = [
         re.compile(r"has no 'objects' member"),
+        re.compile(r"Manager' has no 'create' member"),
         re.compile(r"has no 'DoesNotExist' member"),
         re.compile(r"_ is not callable")]
 
