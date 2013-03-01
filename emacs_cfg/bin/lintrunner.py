@@ -251,10 +251,10 @@ def main():
     options, args = parser.parse_args()
 
     for runnerclass in (
-        PylintRunner,
+        # PylintRunner,
         # PycheckerRunner,
         # Pep8Runner,
-        # PyflakesRunner,
+        PyflakesRunner,
         # CompilerRunner
         ):
 
