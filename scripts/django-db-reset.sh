@@ -27,7 +27,7 @@ django-admin.py createsuperuser --username=root --email=root@root.com --settings
 
 echo "update django_site set domain='localhost:8000', name='localhost' where id=1;" | mysql -u$user -p$pass -f $port_statement $socket_statement $database
 
-echo "insert into django_template(id, name, content) values(1, 'simple.html', '{% load cms_tags sekizai_tags menu_tags %}\n<html>\n<head>\n</head>\n<body>\n{% show_menu %}\n{% placeholder content %}\n</body>\n</html>');" | mysql -u$user -p$pass -f $port_statement $socket_statement $database
+echo "insert into django_template(id, name, content) values(1, 'simple.html', '{% load cms_tags sekizai_tags menu_tags %}\n<html>\n<head>\n{% render_block "'"'"css"'"'" %}\n</head>\n<body>\n{% cms_toolbar %}\n{% show_menu %}\n{% placeholder content %}\n{% render_block "'"'"js"'"'" %}\n</body>\n</html>');" | mysql -u$user -p$pass -f $port_statement $socket_statement $database
 
 echo "insert into django_template_sites(id, template_id, site_id)values(1, 1, 1);" | mysql -u$user -p$pass -f $port_statement $socket_statement $database
 

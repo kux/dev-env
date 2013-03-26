@@ -1,4 +1,7 @@
 import traceback
-for module, line, _, _ in traceback.extract_stack():
-    if '$1' in module and line == $2:
-        import ipdb; ipdb.set_trace(); break
+import os
+expected_frames = set([('$1', $2)])
+if expected_frames.issubset(
+    set((os.path.split(module)[1], line)
+        for module, line, _, _ in traceback.extract_stack())):
+    import ipdb; ipdb.set_trace()
