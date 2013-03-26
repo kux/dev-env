@@ -35,9 +35,9 @@ def _nway_merge(logs, merged_log, burst_regex, burst_delta=5):
     fds = [open(log) for log in logs]
     fds_copy = copy.copy(fds)
     merged_fd = open(merged_log, 'w')
-    post_log_fd = open(merged_log + '.post', 'w')
-    prev_post = 0
-    prev_post_line = ''
+    burst_log_fd = open(merged_log + '.burst', 'w')
+    prev_burst = 0
+    prev_burst_line = ''
     prev_is_written = False
     try:
         current_lines = [fd.readline() for fd in fds]
@@ -49,19 +49,19 @@ def _nway_merge(logs, merged_log, burst_regex, burst_delta=5):
             min_index = timestamps.index(min_timestamp)
             line_to_write = current_lines[min_index]
             merged_fd.write(line_to_write)
-            is_post = re.search(burst_regex, line_to_write) is not None
-            if is_post:
-                post_time = time.mktime(min_timestamp.timetuple())
-                if post_time < prev_post + burst_delta:
+            matches_burst_regex = re.search(burst_regex, line_to_write) is not None
+            if matches_burst_regex:
+                burst_time = time.mktime(min_timestamp.timetuple())
+                if burst_time < prev_burst + burst_delta:
                     if not prev_is_written:
-                        post_log_fd.write('\n--- new burst ---\n')
-                        post_log_fd.write(prev_post_line)
-                    post_log_fd.write(line_to_write)
+                        burst_log_fd.write('\n--- new burst ---\n')
+                        burst_log_fd.write(prev_burst_line)
+                    burst_log_fd.write(line_to_write)
                     prev_is_written = True
                 else:
                     prev_is_written = False
-                prev_post = post_time
-                prev_post_line = line_to_write
+                prev_burst = burst_time
+                prev_burst_line = line_to_write
             new_line = fds[min_index].readline()
             if new_line != '':
                 current_lines[min_index] = new_line
@@ -74,7 +74,7 @@ def _nway_merge(logs, merged_log, burst_regex, burst_delta=5):
         for fd in fds_copy:
             fd.close()
         merged_fd.close()
-        post_log_fd.close()
+        burst_log_fd.close()
 
 
 
@@ -86,7 +86,7 @@ def merge_logs(logs_dir, burst_regex, burst_delta):
         match = re.search(log_regex, log_file)
         if match:
             vhost, log_type, day, host = match.groups()
-            if host == 'post':
+            if host == 'burst':
                 continue
             logs_by_day.setdefault((vhost, log_type, day), []).append(os.path.join(logs_dir, log_file))
     for details, logs in logs_by_day.iteritems():
