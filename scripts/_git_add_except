@@ -1,0 +1,2 @@
+git status --short | cut -c4- | grep -Pv "$1" | xargs git add
+

@@ -18,7 +18,7 @@ echo $port_statement
 echo $socket_statement
 
 echo "drop database $database" | mysql -u$user -p$pass -f $port_statement $socket_statement
-echo "create database $database" | mysql -u$user -p$pass -f $port_statement $socket_statement
+echo "create database $database character set='utf8'" | mysql -u$user -p$pass -f $port_statement $socket_statement
 
 django-admin.py syncdb --all --noinput --settings=$settings_mod
 django-admin.py migrate --fake --settings=$settings_mod

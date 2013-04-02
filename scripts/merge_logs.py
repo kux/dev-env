@@ -81,7 +81,7 @@ def _nway_merge(logs, merged_log, burst_regex, burst_delta=5):
 def merge_logs(logs_dir, burst_regex, burst_delta):
     log_files = os.listdir(logs_dir)
     logs_by_day = {}
-    log_regex = r'(?:(\w*)_)?(access|error)\.log(?:\.(\d+))?\.(\w+)'
+    log_regex = r'(?:(\w*)_)?(access|error)\.log(?:\.(\d+))?\.(\w[a-zA-Z0-9\-]+)'
     for log_file in log_files:
         match = re.search(log_regex, log_file)
         if match:
@@ -103,6 +103,7 @@ def merge_logs(logs_dir, burst_regex, burst_delta):
 if __name__ == '__main__':
     if len(sys.argv) != 4:
         print 'Usage: python merge_logs.py logs_dir burst_regex burst_delta'
+        sys.exit(1)
     _, logs_dir, burst_regex, burst_delta = sys.argv
     burst_regex = re.compile(burst_regex)
     merge_logs(logs_dir, burst_regex, int(burst_delta))
