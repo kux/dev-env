@@ -134,10 +134,14 @@ class PylintRunner(LintRunner):
         "C0301",  # Line to long
         ])
     ignore_regexes = [
-        re.compile(r"has no 'objects' member"),
+        re.compile(r"Class '.*?' has no 'objects' member"),
         re.compile(r"Manager' has no 'create' member"),
-        re.compile(r"has no 'DoesNotExist' member"),
-        re.compile(r"_ is not callable")]
+        re.compile(r"Cladd '.*?' has no 'DoesNotExist' member"),
+        re.compile(r"_ is not callable"),
+        re.compile(r"Class '.*?' has no '_meta' member"),
+        re.compile(r"Instance of 'ManyToManyField' has no '(filter|add|all)' member"),
+        ]
+
 
     @staticmethod
     def fixup_data(_line, data):
@@ -251,9 +255,9 @@ def main():
     options, args = parser.parse_args()
 
     for runnerclass in (
-        # PylintRunner,
+        PylintRunner,
         # PycheckerRunner,
-        # Pep8Runner,
+        Pep8Runner,
         PyflakesRunner,
         # CompilerRunner
         ):
@@ -267,6 +271,6 @@ def main():
             print 'ERROR : {0} failed to run at {1} line 1.'.format(
                 runner.__class__.__name__, args[0])
 
-        
+
 if __name__ == '__main__':
     main()

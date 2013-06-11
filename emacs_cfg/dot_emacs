@@ -1,3 +1,5 @@
+(add-to-list 'load-path "~/.emacs.d/")
+
 (transient-mark-mode 1)
 (show-paren-mode 1)
 (column-number-mode 1)
@@ -86,8 +88,8 @@
 ;; (global-set-key (kbd "C-c q") 'ecb-deactivate)
 
 (load "~/.emacs.d/light-symbol.el")
-(set-face-background  'hi-blue "Grey90")
-(set-face-foreground  'hi-blue "Grey01")
+(set-face-background  'hi-blue "Grey30")
+(set-face-foreground  'hi-blue "Grey99")
 
 (autoload #'espresso-mode "~/.emacs.d/espresso.el" "Start espresso-mode" t)
 (add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
@@ -138,4 +140,11 @@
 
 (require 'color-theme)
 (color-theme-initialize)
-;; (color-theme-ld-dark)
+(require 'color-theme-solarized)
+(color-theme-solarized-dark)
+;; (color-theme-jsc-dark)
+;; (color-theme-tty-dark)
+
+(setq solarized-bold nil)
+(setq solarized-italic nil)
+
