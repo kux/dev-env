@@ -1,4 +1,6 @@
 (add-to-list 'load-path "~/.emacs.d/")
+(add-to-list 'load-path
+              "~/.emacs.d/plugins/yasnippet")
 
 (transient-mark-mode 1)
 (show-paren-mode 1)
@@ -10,11 +12,11 @@
 ;; (set-face-attribute 'default nil :height 95)
 
 ;; scrolling, parens, cursor, menu, and such:
-(scroll-bar-mode nil)
-(blink-cursor-mode nil)
+(scroll-bar-mode -1)
+(blink-cursor-mode -1)
 (setq transient-mark-mode t)
-(menu-bar-mode nil)
-(tool-bar-mode nil)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 
 ;; no splash screen:
 (setq inhibit-startup-message t)
@@ -30,10 +32,10 @@
 
 (cua-selection-mode 1)
 
-(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-region 'disabled -1)
 
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled -1)
+(put 'downcase-region 'disabled -1)
 
 
 (when (load "flymake" t)
@@ -63,6 +65,12 @@
   (flymake-mode 1)
   (setq next-error-function 'flymake-next-error))
 
+(add-hook 'c-mode-hook
+	  (lambda ()
+            (which-function-mode t)
+	    (outline-minor-mode 1)
+	    (light-symbol-mode)))
+
 (add-hook 'python-mode-hook
 	  (lambda ()
 	    (outline-minor-mode 1)
@@ -71,40 +79,36 @@
 
 (add-hook 'python-mode-hook
           (lambda ()
-            (unless (eq buffer-file-name nil) (enable-flymake))))
+            (unless (eq buffer-file-name -1) (enable-flymake))))
 
 (add-hook 'espresso-mode-hook
 	  (lambda ()
 	    (light-symbol-mode)))
 
 (require 'yasnippet)
-(yas/initialize)
-(set-face-background  'yas/field-highlight-face "Grey50")
+(yas-global-mode 1)
+;; (set-face-background  'yas/field-highlight-face "Grey50")
 ;; (set-face-background  'yas/mirror-highlight-face "Grey10")
-(yas/load-directory "/usr/share/emacs/site-lisp/yasnippet/snippets")
+;; (yas/load-directory "/usr/share/emacs/site-lisp/yasnippet/snippets")
 (yas/load-directory "~/.emacs.d/yasnippets/snippets")
 
-;; (global-set-key (kbd "C-c a") 'ecb-activate)
-;; (global-set-key (kbd "C-c q") 'ecb-deactivate)
-
-(load "~/.emacs.d/light-symbol.el")
-(set-face-background  'hi-blue "Grey30")
-(set-face-foreground  'hi-blue "Grey99")
+(global-set-key (kbd "C-c a") 'ecb-activate)
+(global-set-key (kbd "C-c q") 'ecb-deactivate)
 
 (autoload #'espresso-mode "~/.emacs.d/espresso.el" "Start espresso-mode" t)
 (add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . espresso-mode))
 
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode -1)
 
-(setq require-final-newline nil)
+(setq require-final-newline -1)
 
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'reverse)
 (setq uniquify-separator "/")
 
-(setq search-whitespace-regexp nil)
+(setq search-whitespace-regexp -1)
 
 (load "~/.emacs.d/pretty-xml.el")
 (global-set-key (kbd "C-c b") 'bf-pretty-print-xml-region)
@@ -115,6 +119,7 @@
 
 ;; autocompletion, take 3: (app-emacs/pymacs, ropemacs)
 
+(load "~/.emacs.d/pymacs.el")
 (require 'pymacs)
 (pymacs-load "ropemacs" "rope-")
 (global-set-key (kbd "C-c g") 'rope-goto-definition)
@@ -122,29 +127,48 @@
 
 
 
-(autoload 'django-html-mumamo-mode "~/.emacs.d/nxhtml/autostart.el")
-(setq auto-mode-alist
-      (append '(("\\.html?$" . django-html-mumamo-mode)) auto-mode-alist))
-(setq mumamo-background-colors nil) 
-(add-to-list 'auto-mode-alist '("\\.html$" . django-html-mumamo-mode))
-;; Mumamo is making emacs 23.3 freak out:
-(when (and (equal emacs-major-version 23)
-           (equal emacs-minor-version 3))
-  (eval-after-load "bytecomp"
-    '(add-to-list 'byte-compile-not-obsolete-vars
-                  'font-lock-beginning-of-syntax-function))
-  ;; tramp-compat.el clobbers this variable!
-  (eval-after-load "tramp-compat"
-    '(add-to-list 'byte-compile-not-obsolete-vars
-                  'font-lock-beginning-of-syntax-function)))
+;; (autoload 'django-html-mumamo-mode "~/.emacs.d/nxhtml/autostart.el")
+;; (setq auto-mode-alist
+;;       (append '(("\\.html?$" . django-html-mumamo-mode)) auto-mode-alist))
+;; (setq mumamo-background-colors -1) 
+;; (add-to-list 'auto-mode-alist '("\\.html$" . django-html-mumamo-mode))
+;; ;; Mumamo is making emacs 23.3 freak out:
+;; (when (and (equal emacs-major-version 23)
+;;            (equal emacs-minor-version 3))
+;;   (eval-after-load "bytecomp"
+;;     '(add-to-list 'byte-compile-not-obsolete-vars
+;;                   'font-lock-beginning-of-syntax-function))
+;;   ;; tramp-compat.el clobbers this variable!
+;;   (eval-after-load "tramp-compat"
+;;     '(add-to-list 'byte-compile-not-obsolete-vars
+;;                   'font-lock-beginning-of-syntax-function)))
 
+(load "~/.emacs.d/light-symbol.el")
+
+(add-to-list 'load-path "~/.emacs.d/plugins/color-theme-6.6.0")
 (require 'color-theme)
 (color-theme-initialize)
-(require 'color-theme-solarized)
-(color-theme-solarized-dark)
-;; (color-theme-jsc-dark)
-;; (color-theme-tty-dark)
 
-(setq solarized-bold nil)
-(setq solarized-italic nil)
+(set-face-background  'hi-blue "Grey75")
+(set-face-foreground  'hi-blue "Grey00")
+
+(defun my-frame-config (frame)
+  "Custom behaviours for new frames."
+  (with-selected-frame frame
+    (when (display-graphic-p)
+      (require 'color-theme-solarized)
+      (color-theme-solarized-dark)
+      ;; (color-theme-jsc-dark)
+      ;; (color-theme-tty-dark)
+      ;; (color-theme-ld-dark)
+      (setq solarized-bold -1)
+      (setq solarized-italic -1)
+      (set-face-background  'hi-blue "Grey25")
+      (set-face-foreground  'hi-blue "Grey00")
+      )))
+
+;; run now
+(my-frame-config (selected-frame))
+;; and later
+(add-hook 'after-make-frame-functions 'my-frame-config)
 
